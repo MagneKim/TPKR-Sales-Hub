@@ -2,22 +2,111 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Tanabe Pharma 학술행사 관리</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanabe Pharma 포털</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { background-color: white; color: black; font-family: sans-serif; }
-        header { background-color: rgb(0, 91, 172); color: white; padding: 20px; text-align: center; }
-        .sub-text { color: rgb(73, 73, 73); }
-        .btn { background-color: rgb(0, 91, 172); color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        :root {
+            --main-blue: rgb(0, 91, 172);
+            --dark-grey: rgb(73, 73, 73);
+            --white: #ffffff;
+            --black: #000000;
+        }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background-color: var(--white); color: var(--black); }
+        header { background-color: var(--main-blue); color: var(--white); padding: 1.5rem; text-align: center; }
+
+        .container { max-width: 500px; margin: 3rem auto; padding: 2rem; border: 1px solid #ddd; border-radius: 8px; shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { color: var(--dark-grey); text-align: center; }
+
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+
+        .btn-primary { background-color: var(--main-blue); color: var(--white); }
+        .btn-secondary { background-color: var(--dark-grey); color: var(--white); }
+        button:hover { opacity: 0.8; }
+
+        #logout-section { display: none; text-align: center; }
+        .user-info { margin-bottom: 20px; font-weight: bold; color: var(--main-blue); }
     </style>
 </head>
 <body>
-    <header>
-        <h1>학술행사 및 교육 자료 공유</h1>
-    </header>
-    <main style="padding: 20px;">
-        <h2 class="sub-text">환영합니다!</h2>
-        <p>@tanabe-pharma.com 계정으로 로그인 후 이용해 주세요.</p>
-        <button class="btn">로그인 하기</button>
-    </main>
+
+<header>
+    <h1>Tanabe Pharma Portal</h1>
+</header>
+
+<div class="container">
+    <div id="auth-section">
+        <h2>멤버 로그인</h2>
+        <input type="email" id="email" placeholder="회사 이메일 (@tanabe-pharma.com)">
+        <input type="password" id="password" placeholder="비밀번호">
+
+        <div class="btn-group">
+            <button class="btn-primary" onclick="handleSignUp()">회원가입</button>
+            <button class="btn-secondary" onclick="handleSignIn()">로그인</button>
+        </div>
+    </div>
+
+    <div id="logout-section">
+        <div class="user-info" id="user-display"></div>
+        <p>인증되었습니다. 학술 행사 및 자료실에 접근할 수 있습니다.</p>
+        <button class="btn-secondary" onclick="handleSignOut()">로그아웃</button>
+    </div>
+</div>
+
+<script>
+    // [필독] 여기에 Supabase API 정보를 입력하세요!
+    const SUPABASE_URL = 'https://ozwkugrvxgrlghlprrfj.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_Zslsi48cS83wd_EtoD4WCQ_B0IkZkRH';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // 1. 회원가입 기능
+    async function handleSignUp() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // 이메일 도메인 체크
+        if (!email.endsWith('@tanabe-pharma.com')) {
+            alert('가입 불가: @tanabe-pharma.com 주소만 사용 가능합니다.');
+            return;
+        }
+
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
+        if (error) alert('오류 발생: ' + error.message);
+        else alert('가입 확인 메일을 보냈습니다! 메일함을 확인해주세요.');
+    }
+
+    // 2. 로그인 기능
+    async function handleSignIn() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) alert('로그인 실패: ' + error.message);
+        else {
+            alert('로그인 성공!');
+            updateUI(data.user);
+        }
+    }
+
+    // 3. 로그아웃 기능
+    async function handleSignOut() {
+        await supabaseClient.auth.signOut();
+        alert('로그아웃 되었습니다.');
+        location.reload();
+    }
+
+    // 4. 화면 전환 처리
+    function updateUI(user) {
+        if (user) {
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('logout-section').style.display = 'block';
+            document.getElementById('user-display').innerText = user.email + ' 님 환영합니다.';
+        }
+    }
+</script>
+
 </body>
 </html>
