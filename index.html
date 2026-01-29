@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tanabe Pharma 학술포털</title>
+    <title>TPKR Sales-division Hub</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./config.js"></script> 
+    <script src="./config.js"></script>
 
     <style>
         :root {
@@ -50,7 +50,7 @@
 
 <div id="landing" class="hero">
     <h2>Academic Event & Training</h2>
-    <p>타나베파마 코리아 임직원을 위한 전용 플랫폼입니다.</p>
+    <p>TPKR 영업본부 직원 전용 플랫폼</p>
     <button class="btn-start" onclick="openModal()">시작하기</button>
 </div>
 
@@ -97,7 +97,7 @@
 
         // 가입 모드일 때 비밀번호 창 숨기기
         document.getElementById('password').style.display = mode === 'signup' ? 'none' : 'block';
-        document.getElementById('msg').innerText = mode === 'signup' ? '비밀번호 설정 없이 메일 인증으로 가입됩니다.' : '';
+        document.getElementById('msg').innerText = mode === 'signup' ? '메일 인증으로 가입됩니다.' : '';
     }
 
     async function handleAuth() {
