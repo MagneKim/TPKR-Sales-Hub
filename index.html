@@ -45,7 +45,7 @@
 <body>
 
 <header>
-    <h1>TANABE PHARMA KOREA</h1>
+    <h1>Tanabe Pharma Korea</h1>
 </header>
 
 <div id="landing" class="hero">
@@ -112,7 +112,7 @@
             // 매직 링크(비밀번호 없는 로그인/가입) 발송
             const { error } = await supabaseClient.auth.signInWithOtp({
                 email,
-                options: { emailRedirectTo: window.location.origin }
+                options: { emailRedirectTo: 'https://magnekim.github.io/TPKR-Sales-Hub/' }
             });
             if (error) alert(error.message);
             else alert('인증 메일이 발송되었습니다. 메일함의 링크를 클릭하여 접속해 주세요!');
@@ -144,6 +144,3 @@
 
 </body>
 </html>
-
-
-
